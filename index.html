@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивная таблица</title>
+    <style>
+        #product-table {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            margin: 20px;
+            padding: 10px;
+        }
+
+        .table-header,
+        .table-footer {
+            display: flex;
+            flex-direction: row;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .header-cell,
+        .footer-cell,
+        .body-cell {
+            flex: 1;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .header-cell {
+            font-weight: bold;
+        }
+
+        .body-cell,
+        .footer-cell {
+            border-left: 1px solid #ccc;
+        }
+
+        .body-cell:last-child,
+        .footer-cell:last-child {
+            border-right: 1px solid #ccc;
+        }
+
+        .table-footer .footer-cell[colspan="4"] {
+            text-align: right;
+        }
+
+        .table-item {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            justify-content: center;
+            border-bottom: solid 1px #ccc;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+
+        .table-item__delete,
+        .table-item__edit {
+            cursor: pointer;
+            border: solid 1px #ccc;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 3px 7px;
+            text-transform: uppercase;
+        }
+
+        .table-item__edit {
+            margin-left: 10px;
+        }
+
+        .table-item__wrap {
+            display: flex;
+        }
+
+        .table-item__name,
+        .table-item__category,
+        .table-item__price,
+        .table-item__sum,
+        .table-item__quantity,
+        .table-item__wrap {
+            justify-self: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Интерактивная таблица для учета товаров</h1>
+
+    <form id="product-form">
+        <label for="product-name">Название товара:</label>
+        <input type="text" id="product-name" required>
+
+        <label for="product-category">Категория товара:</label>
+        <input type="text" id="product-category" required>
+
+        <label for="product-price">Цена за единицу товара:</label>
+        <input type="number" id="product-price" required>
+
+        <label for="product-quantity">Количество товара на складе:</label>
+        <input type="number" id="product-quantity" required>
+
+        <button type="submit" id="submit">Добавить товар</button>
+    </form>
+
+    <div id="product-table">
+        <div class="table-header">
+            <div class="header-cell">Название товара</div>
+            <div class="header-cell">Категория товара</div>
+            <div class="header-cell">Цена за единицу</div>
+            <div class="header-cell">Количество на складе</div>
+            <div class="header-cell">Общая стоимость</div>
+            <div class="header-cell">Действия</div>
+        </div>
+        <div class="table-body">
+            <div class="table-item" data-productid="101">
+                <div class="table-item__name">dfgd</div>
+                <div class="table-item__category">dsagfdf</div>
+                <div class="table-item__price">321</div>
+                <div class="table-item__quantity">232032</div>
+                <div class="table-item__sum">3262112</div>
+                <div class="table-item__wrap">
+                    <div class="table-item__delete" data-productid="101">УДАЛИТЬ</div>
+                    <div class="table-item__edit">Редактировать</div>
+                </div>
+            </div>
+        </div>
+        <div class="table-footer">
+            <div class="footer-cell" colspan="4">Общая сумма:</div>
+            <div class="footer-cell" id="total-amount"></div>
+            <div class="footer-cell"></div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
