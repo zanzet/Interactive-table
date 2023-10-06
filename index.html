@@ -84,6 +84,13 @@
         .table-item__wrap {
             justify-self: center;
         }
+
+        .header-name,
+        .header-price,
+        .header-quantity,
+        .header-sum {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -108,25 +115,14 @@
 
     <div id="product-table">
         <div class="table-header">
-            <div class="header-cell">Название товара</div>
+            <div class="header-cell header-name">Название товара</div>
             <div class="header-cell">Категория товара</div>
-            <div class="header-cell">Цена за единицу</div>
-            <div class="header-cell">Количество на складе</div>
-            <div class="header-cell">Общая стоимость</div>
+            <div class="header-cell header-price">Цена за единицу</div>
+            <div class="header-cell header-quantity">Количество на складе</div>
+            <div class="header-cell header-sum">Общая стоимость</div>
             <div class="header-cell">Действия</div>
         </div>
         <div class="table-body">
-            <div class="table-item" data-productid="101">
-                <div class="table-item__name">dfgd</div>
-                <div class="table-item__category">dsagfdf</div>
-                <div class="table-item__price">321</div>
-                <div class="table-item__quantity">232032</div>
-                <div class="table-item__sum">3262112</div>
-                <div class="table-item__wrap">
-                    <div class="table-item__delete" data-productid="101">УДАЛИТЬ</div>
-                    <div class="table-item__edit">Редактировать</div>
-                </div>
-            </div>
         </div>
         <div class="table-footer">
             <div class="footer-cell" colspan="4">Общая сумма:</div>

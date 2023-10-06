@@ -21,11 +21,13 @@ const name = document.querySelector('#product-name'),
     price = document.querySelector('#product-price'),
     quantity = document.querySelector('#product-quantity'),
     tableWrap = document.querySelector('.table-body'),
-    form = document.querySelector('#product-form');
+    form = document.querySelector('#product-form'),
+    tableHeader = document.querySelector('.table-header');
 
 localStorage.setItem('products', []);
 let storage = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
 let counter = 1;
+
 //добавление продукта 
 form.addEventListener('submit', function (e) {
     e.preventDefault()
@@ -217,3 +219,43 @@ function updateTable() {
     });
     productSum()
 }
+
+//сортировка
+function sortProducts(sortType) {
+    switch (sortType) {
+        case 'name':
+            storage.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'price':
+            storage.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+            break;
+        case 'quantity':
+            storage.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity));
+            break;
+        case 'total':
+            storage.sort((a, b) => (parseFloat(a.price) * parseInt(a.quantity)) - (parseFloat(b.price) * parseInt(b.quantity)));
+            break;
+        default:
+            console.error('Некорректный тип сортировки');
+            return;
+    }
+    updateTable();
+}
+
+tableHeader.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('header-name')) {
+        sortProducts('name');
+    }
+    if (e.target && e.target.classList.contains('header-sum')) {
+        sortProducts('total');
+
+    }
+    if (e.target && e.target.classList.contains('header-price')) {
+        sortProducts('price');
+
+    }
+    if (e.target && e.target.classList.contains('header-quantity')) {
+        sortProducts('quantity');
+
+    }
+});
