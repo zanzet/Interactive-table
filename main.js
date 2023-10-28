@@ -15,7 +15,6 @@
 // Реализовать возможность редактирования уже существующих записей о товарах в таблице.
 // Добавить сортировку товаров по различным столбцам(название, цена, количество, общая стоимость).
 // Добавить фильтрацию товаров по категориям или диапазону цен.
-
 const name = document.querySelector('#product-name'),
     category = document.querySelector('#product-category'),
     price = document.querySelector('#product-price'),
@@ -24,7 +23,7 @@ const name = document.querySelector('#product-name'),
     form = document.querySelector('#product-form'),
     tableHeader = document.querySelector('.table-header');
 
-localStorage.setItem('products', []);
+!localStorage.getItem('products') ? localStorage.setItem('products', []) : null
 let storage = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
 let counter = 1;
 
@@ -123,8 +122,8 @@ function renderProduct(product) {
 tableWrap.addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('table-item__delete')) {
         const productId = +e.target.closest('.table-item').dataset.productid;
-        deleteProduct(productId)
-        productSum()
+        deleteProduct(productId);
+        productSum();
     }
 
 });
@@ -142,6 +141,7 @@ function deleteProduct(id) {
     if (productElement) {
         productElement.remove();
     }
+
 }
 //функция подсчета общей сумы
 
@@ -156,17 +156,24 @@ function productSum() {
     totalAmount.textContent = allSum
 }
 // редактирование продукта
+let flag;
 
 tableWrap.addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('table-item__edit')) {
         const productId = +e.target.closest('.table-item').dataset.productid;
 
+        if (flag) {
+            alert('Редактирование активно')
+
+            return;
+        }
+
         editProduct(productId);
+        flag = true;
     };
 });
 
 function editProduct(id) {
-
     const productToEdit = storage.find(product => product.id === id);
 
     if (!productToEdit) {
@@ -207,6 +214,7 @@ function editProduct(id) {
 
         // Обновить данные в localStorage
         localStorage.setItem('products', JSON.stringify(storage));
+        flag = false
     });
 }
 
@@ -259,3 +267,7 @@ tableHeader.addEventListener('click', function (e) {
 
     }
 });
+
+storage.forEach(i => {
+    renderProduct(i)
+})
