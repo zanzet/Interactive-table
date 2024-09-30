@@ -21,11 +21,14 @@ const name = document.querySelector('#product-name'),
     quantity = document.querySelector('#product-quantity'),
     tableWrap = document.querySelector('.table-body'),
     form = document.querySelector('#product-form'),
-    tableHeader = document.querySelector('.table-header');
+    tableHeader = document.querySelector('.table-header'),
+    btnSubmit = document.querySelector('#submit');
 
 !localStorage.getItem('products') ? localStorage.setItem('products', []) : null
 let storage = localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : [];
 let counter = 1;
+let flag;
+let flagBtnSubmit;
 
 //добавление продукта 
 form.addEventListener('submit', function (e) {
@@ -45,13 +48,13 @@ form.addEventListener('submit', function (e) {
     }
 
     // Проверка, что цена - положительное число
-    if (parseInt(price.value) <= 0) {
+    if (parseInt(price.value) < 0) {
         alert('Пожалуйста, введите корректную цену (положительное число, с двумя знаками после запятой).');
         return;
     }
 
     // Проверка, что количество - положительное число
-    if (parseInt(quantity.value) <= 0) {
+    if (parseInt(quantity.value) < 0) {
         alert('Пожалуйста, введите корректное количество (положительное число).');
         return;
     }
@@ -63,10 +66,7 @@ form.addEventListener('submit', function (e) {
     renderProduct(product)
     productSum()
 
-    name.value = '';
-    category.value = '';
-    price.value = '';
-    quantity.value = '';
+    form.reset()
 });
 
 function createTableCell(className, textContent, dataset) {
@@ -117,8 +117,8 @@ function renderProduct(product) {
     wrapBtn.append(btn);
     wrapBtn.append(edit);
 }
-//удаление продукта
 
+//удаление продукта
 tableWrap.addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('table-item__delete')) {
         const productId = +e.target.closest('.table-item').dataset.productid;
@@ -143,8 +143,8 @@ function deleteProduct(id) {
     }
 
 }
-//функция подсчета общей сумы
 
+//функция подсчета общей сумы
 function productSum() {
     let allSum = 0
     storage.forEach(product => {
@@ -155,24 +155,22 @@ function productSum() {
     const totalAmount = document.querySelector('#total-amount');
     totalAmount.textContent = allSum
 }
-// редактирование продукта
-let flag;
 
+// редактирование продукта
 tableWrap.addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('table-item__edit')) {
         const productId = +e.target.closest('.table-item').dataset.productid;
 
-        if (flag) {
-            alert('Редактирование активно')
-
-            return;
-        }
-
         editProduct(productId);
         flag = true;
+        btnSubmit.disabled = true
+
+        if (flag) {
+            alert('Редактирование активно')
+        }
     };
 });
-
+console.dir(btnSubmit)
 function editProduct(id) {
     const productToEdit = storage.find(product => product.id === id);
 
@@ -200,12 +198,27 @@ function editProduct(id) {
         productToEdit.price = price.value;
         productToEdit.quantity = quantity.value;
 
-        // Обновить отображение в таблице
+        if (productToEdit.name === '') {
+            alert('Пожалуйста, введите название продукта.');
+            return;
+        }
 
+        // Проверка, что цена - положительное число
+        if (parseInt(productToEdit.price) < 0) {
+            alert('Пожалуйста, введите корректную цену (положительное число, с двумя знаками после запятой).');
+            return;
+        }
+
+        // Проверка, что количество - положительное число
+        if (parseInt(productToEdit.quantity) < 0) {
+            alert('Пожалуйста, введите корректное количество (положительное число).');
+            return;
+        }
+
+        // Обновить отображение в таблице
         updateTable()
 
         // Удалить кнопку "Сохранить" и очистить поля формы
-
         saveButton.remove();
         name.value = '';
         category.value = '';
@@ -215,6 +228,7 @@ function editProduct(id) {
         // Обновить данные в localStorage
         localStorage.setItem('products', JSON.stringify(storage));
         flag = false
+        btnSubmit.disabled = false
     });
 }
 
